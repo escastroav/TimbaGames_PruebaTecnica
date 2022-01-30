@@ -17,8 +17,8 @@ public:
     void Box(sf::CircleShape &poly, sf::ConvexShape &conv);        
 
     float Xpos, Ypos;
-    float XScreenSize, YScreensize;    
-    float speed;
+    float XScreenSize, YScreenSize;    
+    float speed, angSpeed;
     float Xcenter, Ycenter, AnimRadius;
     float XBoxPos, YBoxPos, BoxWidth, BoxHeight;
 private:

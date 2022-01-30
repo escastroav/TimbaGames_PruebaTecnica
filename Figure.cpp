@@ -133,6 +133,9 @@ void Figure::AnimateFigure()
         break;
     case upDown:
         UpDown(polygon, convex);
+        break; 
+    case circular:
+        Circular(polygon, convex);
         break;    
     }
 }
