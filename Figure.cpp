@@ -1,21 +1,26 @@
 #include "headers/Figure.h"
 
-Figure::Figure(sf::Vector2f center, FigureSelect fig)
-{      
+Figure::Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim) : Animation(anim)
+{   
+    zero = sf::Vector2f(0.f,0.f);   
     figType = fig;
+    figAnim = anim;
     firstVector = center;
     secondVector = center;
     thirdVector = center;
 
     XWindowPos = center.x;
     YWindowPos = center.y;
+
+
     InitFigure();
 }
 
-Figure::Figure()
+Figure::Figure() : Animation(noAnim)
 {      
     zero = sf::Vector2f(0.f,0.f);
     figType = square;
+    figAnim = noAnim;
     firstVector = zero;
     secondVector = zero;
     thirdVector = zero;
@@ -77,8 +82,8 @@ Figure::~Figure()
 void Figure::UpdatePolygon(sf::Vector2f radius)
 {
     secondVector =  radius;
-    relVector.x = secondVector.x - firstVector.y; 
-    relVector.y = secondVector.y - firstVector.y; 
+    relVector.x = abs(secondVector.x - firstVector.y); 
+    relVector.y = abs(secondVector.y - firstVector.y); 
     pixelRadius = relVector.x > relVector.y ? relVector.y : relVector.x;
     polygon.setPosition(firstVector);
     polygon.setOrigin(pixelRadius, pixelRadius);
@@ -100,6 +105,36 @@ void Figure::UpdateConvex(sf::Vector2f next, int pointCount)
         convex.setPoint(2, thirdVector);    
     }
 
+}
+void Figure::SetAnimParameters(float xcenter, float ycenter, float radius, float width, float height, float spd)
+{
+    speed = spd;  
+    Xcenter = xcenter;
+    Ycenter = ycenter;
+    AnimRadius = radius;
+    BoxWidth = width;
+    BoxHeight = height;    
+}
+void Figure::SetAnimParameters(sf::RenderTarget* target, float spd, float MoveScale)
+{
+    speed = spd;  
+    Xcenter = target->getSize().x;
+    Ycenter = target->getSize().y;
+    AnimRadius = target->getSize().y * MoveScale;
+    BoxWidth = target->getSize().x * MoveScale;
+    BoxHeight = target->getSize().y * MoveScale;    
+}
+void Figure::AnimateFigure()
+{
+    switch (figAnim)
+    {
+    case leftRight:
+        LeftRight(polygon,convex);
+        break;
+    case upDown:
+        UpDown(polygon, convex);
+        break;    
+    }
 }
 
 void Figure::Render(sf::RenderTarget * target)

@@ -79,8 +79,10 @@ void GameWindow::GameEventsHandler()
             case sf::Event::KeyPressed:
                 if(evnt.key.code == sf::Keyboard::Escape)
                     this->mainWindow->close();
-                else if(!drawing)
+                else if(!drawing){
                     SelectFigureToDraw();
+                    SelectAnimation();
+                    }
                 break;
 
             case sf::Event::MouseButtonPressed:                
@@ -128,46 +130,44 @@ void GameWindow::SelectFigureToDraw()
     case sf::Keyboard::R:
         fig = triangle;
         std::cout << "Dibujando triangulos.\n";
+        break;    
+    }
+}
+
+void GameWindow::SelectAnimation()
+{
+    switch (evnt.key.code)
+    {
+    case sf::Keyboard::G:
+        anim = noAnim;
+        std::cout << "Animacion: ninguna.\n";
         break;
-    
+    case sf::Keyboard::A:
+        anim = leftRight;
+        std::cout << "Animacion: Left-right.\n";
+        break;
+    case sf::Keyboard::S:
+        anim = upDown;
+        std::cout << "Animacion: Up-Down.\n";
+        break;
+    case sf::Keyboard::D:
+        anim = circular;
+        std::cout << "Animacion: Circular.\n";
+        break;
+    case sf::Keyboard::F:
+        anim = box;
+        std::cout << "Animacion: Box.\n";
+        break;    
     }
 }
 
 void GameWindow::SpawnFigure()
 {
     std::cout << "max Points To draw: " << maxCount << "\n";
-    figures.push_back(Figure(floatMousePos, fig));
+    figures.push_back(Figure(floatMousePos, fig, anim));
     std::cout << "figure spawned: " << fig 
     << ", x = " << figures.back().GetXPos() << ", "
-    << ", y = " << figures.back().GetYPos() << "\n"; 
-    /*
-    switch (fig)
-    {
-    case square:
-        squares.push_back(Square(floatMousePos));
-        std::cout << "Square Spawned at: " << squares.back().GetXPos() << "\t" << squares.back().GetYPos() << "\n";    
-        std::cout << "Is drawing:" << drawing << "\n";
-        break;
-    
-    case circle:
-        circles.push_back(Circle(floatMousePos));
-        std::cout << "Circle Spawned at: " << squares.back().GetXPos() << "\t" << squares.back().GetYPos() << "\n";    
-        std::cout << "Is drawing:" << drawing << "\n";
-        break;
-
-    case hexagon:
-        hexagons.push_back(Hexagon(floatMousePos));
-        std::cout << "Hexagon Spawned at: " << hexagons.back().GetXPos() << "\t" << hexagons.back().GetYPos() << "\n";    
-        std::cout << "Is drawing:" << drawing << "\n";
-        break;
-    case triangle:
-        triangles.push_back(Triangle(floatMousePos));
-        /*std::cout << "Hexagon Spawned at: " << hexagons.back().GetXPos() << "\t" << hexagons.back().GetYPos() << "\n";    
-        std::cout << "Is drawing:" << drawing << "\n";
-        break;
-    }*/
-    
-       
+    << ", y = " << figures.back().GetYPos() << "\n";    
 }
 
 void GameWindow::DrawFigure()
@@ -188,42 +188,17 @@ void GameWindow::DrawFigure()
         std::cout << "Polygon Final point rel: " 
             << figures.back().GetSecondVec().x - figures.back().GetFirstVec().x << "\t"
             << figures.back().GetSecondVec().y - figures.back().GetFirstVec().y  << "\n";
-    }
-    /*switch (fig)
-    {
-    case square:
-        squares.back().Update(floatMousePos);
-        /*std::cout << "Square Final point at: " 
-            << squares.back().GetFinalVec().x - squares.back().GetInitVec().x << "\t"
-            << squares.back().GetFinalVec().y - squares.back().GetInitVec().y  << "\n";
-        break;
-    case circle:
-        circles.back().Update(floatMousePos);
-        /*std::cout << "Square Final point at: " 
-            << circles.back().GetFinalVec().x - circles.back().GetInitVec().x << "\t"
-            << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";
-        break;
-    case hexagon:
-        hexagons.back().Update(floatMousePos);
-        /*std::cout << "Square Final point at: " 
-            << hexagons.back().GetFinalVec().x - hexagons.back().GetInitVec().x << "\t"
-            << hexagons.back().GetFinalVec().y - hexagons.back().GetInitVec().y  << "\n";
-        break;
-    case triangle:
-        triangles.back().Update(floatMousePos, pointCount);
-        std::cout << triangles.back().GetFirst().x << ","
-         << triangles.back().GetFirst().y << ","
-           << triangles.back().GetSecond().x << ","
-            << triangles.back().GetSecond().y << ","
-             << triangles.back().GetThird().x << ","
-             << triangles.back().GetThird().x << "\n";
-        break;
-    }*/
+    }    
+    if(figures.back().GetFigAnim() != noAnim)
+        figures.back().SetAnimState(false);    
 }
 
 void GameWindow::FinishFigure()
 {
     drawing = false;
+    figures.back().SetAnimParameters();
+    if(figures.back().GetFigAnim() != noAnim)
+        figures.back().SetAnimState(true);
     ClearPoints();
 }
 
@@ -250,42 +225,26 @@ void GameWindow::ClearPoints()
 void GameWindow::Updater()
 {
     GameEventsHandler();    
-   /* if(drawing)
-            {                    
-                    mousePosWindow = sf::Mouse::getPosition(*mainWindow);
-                    floatMousePos = sf::Vector2f(mousePosWindow.x,mousePosWindow.y);                
-                    DrawFigure();
-            }*/
+    for(int ii = 0; ii < static_cast<int>(figures.size());ii++)
+    {
+        if(figures.at(ii).IsAnimated())
+        {
+            figures.at(ii).AnimateFigure();
+        }
+    }
+    
+    
 }
 
 void GameWindow::Renderer()
 {
     this->mainWindow->clear(*this->backGroundColor);
-/*
-    for(auto sq : squares)
-    {
-        sq.Render(mainWindow);
-    }
 
-    for(auto cl : circles)
-    {
-        cl.Render(mainWindow);
-    }
-
-    for(auto hx : hexagons)
-    {
-        hx.Render(mainWindow);
-    }
-
-    for(auto tr : triangles)
-    {
-        tr.Render(mainWindow);
-    }
-*/
     for(auto fg : figures)
     {
         fg.Render(mainWindow);
     }
+
     for(auto pt : drawPoints)
     {
         pt.Render(mainWindow);

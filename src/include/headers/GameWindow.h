@@ -7,10 +7,6 @@
 
 #include "headers/Point.h"
 #include "headers/Figure.h"
-//#include "headers/Square.h"
-//#include "headers/Circle.h"
-//#include "headers/Hexagon.h"
-//#include "headers/Triangle.h"
 
 
 class GameWindow 
@@ -27,6 +23,7 @@ public:
     const bool IsRunning() const;
     void GameEventsHandler();
     void SelectFigureToDraw();
+    void SelectAnimation();
     void SpawnFigure();  
     void DrawFigure();
     void FinishFigure();
@@ -43,7 +40,7 @@ private:
     sf::Event evnt;
 
     FigureSelect fig = square;
-
+    FigureAnimation anim = noAnim;
     sf::Vector2i mousePosWindow;
     sf::Vector2f floatMousePos;
 
@@ -51,15 +48,13 @@ private:
     int pointCount;
     int maxCount;
 
-    //std::vector<Square> squares;
-    //std::vector<Circle> circles;
-    //std::vector<Hexagon> hexagons;
-    //std::vector<Triangle> triangles;
-
     std::vector<Figure> figures;
 
     unsigned int XScreenResolution = 0U, YScreenResolution = 0U;
     
     bool drawing = false;
-
+    float XScreenSize, YScreensize;    
+    float speed;
+    float Xcenter, Ycenter, AnimRadius;
+    float XBoxPos, YBoxPos, BoxWidth, BoxHeight;
 };
