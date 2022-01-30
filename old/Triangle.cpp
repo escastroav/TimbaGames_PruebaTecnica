@@ -44,7 +44,7 @@ void Triangle::Update(sf::Vector2f next, int pointCount)
     }
     else if(pointCount == 2);
     {
-        thirdVector = next;        
+        thirdVector = next; 
         triangle.setPoint(2, thirdVector);
         vectorCount = 3;        
     }

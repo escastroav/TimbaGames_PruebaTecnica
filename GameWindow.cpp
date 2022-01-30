@@ -136,6 +136,11 @@ void GameWindow::SelectFigureToDraw()
 void GameWindow::SpawnFigure()
 {
     std::cout << "max Points To draw: " << maxCount << "\n";
+    figures.push_back(Figure(floatMousePos, fig));
+    std::cout << "figure spawned: " << fig 
+    << ", x = " << figures.back().GetXPos() << ", "
+    << ", y = " << figures.back().GetYPos() << "\n"; 
+    /*
     switch (fig)
     {
     case square:
@@ -158,34 +163,51 @@ void GameWindow::SpawnFigure()
     case triangle:
         triangles.push_back(Triangle(floatMousePos));
         /*std::cout << "Hexagon Spawned at: " << hexagons.back().GetXPos() << "\t" << hexagons.back().GetYPos() << "\n";    
-        std::cout << "Is drawing:" << drawing << "\n";*/
+        std::cout << "Is drawing:" << drawing << "\n";
         break;
-    }
+    }*/
     
        
 }
 
 void GameWindow::DrawFigure()
 {    
-    switch (fig)
+    if(fig == triangle)
+    {
+        figures.back().UpdateConvex(floatMousePos, pointCount);    
+        std::cout << figures.back().GetFirstVec().x << ","
+         << figures.back().GetFirstVec().y << ","
+           << figures.back().GetSecondVec().x << ","
+            << figures.back().GetSecondVec().y << ","
+             << figures.back().GetThirdVec().x << ","
+             << figures.back().GetThirdVec().x << "\n";    
+    }
+    else
+    {
+        figures.back().UpdatePolygon(floatMousePos);
+        std::cout << "Polygon Final point rel: " 
+            << figures.back().GetSecondVec().x - figures.back().GetFirstVec().x << "\t"
+            << figures.back().GetSecondVec().y - figures.back().GetFirstVec().y  << "\n";
+    }
+    /*switch (fig)
     {
     case square:
         squares.back().Update(floatMousePos);
         /*std::cout << "Square Final point at: " 
             << squares.back().GetFinalVec().x - squares.back().GetInitVec().x << "\t"
-            << squares.back().GetFinalVec().y - squares.back().GetInitVec().y  << "\n";*/
+            << squares.back().GetFinalVec().y - squares.back().GetInitVec().y  << "\n";
         break;
     case circle:
         circles.back().Update(floatMousePos);
         /*std::cout << "Square Final point at: " 
             << circles.back().GetFinalVec().x - circles.back().GetInitVec().x << "\t"
-            << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";*/
+            << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";
         break;
     case hexagon:
         hexagons.back().Update(floatMousePos);
         /*std::cout << "Square Final point at: " 
             << hexagons.back().GetFinalVec().x - hexagons.back().GetInitVec().x << "\t"
-            << hexagons.back().GetFinalVec().y - hexagons.back().GetInitVec().y  << "\n";*/
+            << hexagons.back().GetFinalVec().y - hexagons.back().GetInitVec().y  << "\n";
         break;
     case triangle:
         triangles.back().Update(floatMousePos, pointCount);
@@ -196,7 +218,7 @@ void GameWindow::DrawFigure()
              << triangles.back().GetThird().x << ","
              << triangles.back().GetThird().x << "\n";
         break;
-    }
+    }*/
 }
 
 void GameWindow::FinishFigure()
@@ -239,7 +261,7 @@ void GameWindow::Updater()
 void GameWindow::Renderer()
 {
     this->mainWindow->clear(*this->backGroundColor);
-
+/*
     for(auto sq : squares)
     {
         sq.Render(mainWindow);
@@ -259,7 +281,11 @@ void GameWindow::Renderer()
     {
         tr.Render(mainWindow);
     }
-
+*/
+    for(auto fg : figures)
+    {
+        fg.Render(mainWindow);
+    }
     for(auto pt : drawPoints)
     {
         pt.Render(mainWindow);
