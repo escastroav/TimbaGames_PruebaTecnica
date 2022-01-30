@@ -79,6 +79,8 @@ void GameWindow::GameEventsHandler()
             case sf::Event::KeyPressed:
                 if(evnt.key.code == sf::Keyboard::Escape)
                     this->mainWindow->close();
+                else if(!drawing)
+                    SelectFigureToDraw();
                 break;
 
             case sf::Event::MouseButtonPressed:                
@@ -101,23 +103,58 @@ void GameWindow::GameEventsHandler()
                     floatMousePos = sf::Vector2f(mousePosWindow.x,mousePosWindow.y);                
                     DrawFigure();
                 }
-                break;
+                break;            
         }        
     }    
 }
 
+void GameWindow::SelectFigureToDraw()
+{   
+    switch (evnt.key.code)
+    {
+    case sf::Keyboard::Q:
+        fig = square;
+        std::cout << "Dibujando cuadrados.\n";
+        break;
+    case sf::Keyboard::W:
+        fig = circle;
+        std::cout << "Dibujando circulos.\n";
+        break;
+    case sf::Keyboard::E:
+        fig = hexagon;
+        std::cout << "Dibujando hexagonos.\n";
+        break;
+    case sf::Keyboard::R:
+        fig = triangle;
+        std::cout << "Dibujando triangulos.\n";
+        break;
+    
+    }
+}
+
 void GameWindow::SpawnFigure()
 {
-   
-    squares.push_back(Square(floatMousePos));
-    std::cout << "Square Spawned at: " << squares.back().GetXPos() << "\t" << squares.back().GetYPos() << "\n";
-    //std::cout << "Square Spawned at: " << floatMousePos.x << "\t" << floatMousePos.y << "\n";
-    std::cout << "Is drawing:" << drawing << "\n";
+    switch (fig)
+    {
+    case square:
+        squares.push_back(Square(floatMousePos));
+        std::cout << "Square Spawned at: " << squares.back().GetXPos() << "\t" << squares.back().GetYPos() << "\n";    
+        std::cout << "Is drawing:" << drawing << "\n";
+        break;
+    
+    case circle:
+        circles.push_back(Circle(floatMousePos));
+        std::cout << "Circle Spawned at: " << squares.back().GetXPos() << "\t" << squares.back().GetYPos() << "\n";    
+        std::cout << "Is drawing:" << drawing << "\n";
+        break;
+    }
+    
        
 }
 
 void GameWindow::DrawFigure()
 {
+    
     switch (fig)
     {
     case square:
@@ -125,6 +162,12 @@ void GameWindow::DrawFigure()
         std::cout << "Square Final point at: " 
             << squares.back().GetFinalVec().x - squares.back().GetInitVec().x << "\t"
             << squares.back().GetFinalVec().y - squares.back().GetInitVec().y  << "\n";
+        break;
+    case circle:
+        circles.back().Update(floatMousePos);
+        std::cout << "Square Final point at: " 
+            << circles.back().GetFinalVec().x - circles.back().GetInitVec().x << "\t"
+            << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";
         break;
     }
 }
@@ -170,15 +213,21 @@ void GameWindow::Renderer()
 {
     this->mainWindow->clear(*this->backGroundColor);
 
-    for(auto pt : this->drawPoints)
-    {
-        pt.Render(this->mainWindow);
-    }
-
     for(auto sq : squares)
     {
         sq.Render(mainWindow);
     }
+
+    for(auto cl : circles)
+    {
+        cl.Render(mainWindow);
+    }
+
+    for(auto pt : drawPoints)
+    {
+        pt.Render(mainWindow);
+    }
+
 
     this->mainWindow->display();
 }

@@ -33,9 +33,10 @@ Square::~Square()
 void Square::Update(sf::Vector2f radius)
 {
     finalVector =  radius;
-    relVector.x = finalVector.x - initVector.y; 
-    relVector.y = finalVector.y - initVector.y; 
+    relVector.x = abs(finalVector.x - initVector.y); 
+    relVector.y = abs(finalVector.y - initVector.y); 
     pixelSize = relVector.x > relVector.y ? relVector.y : relVector.x;
+    //pixelSize = sqrt(relVector.x*relVector.x + relVector.y*relVector.y);
     square.setPosition(initVector);
     square.setOrigin(pixelSize, pixelSize);
     square.setRadius(pixelSize);

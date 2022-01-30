@@ -7,6 +7,7 @@
 
 #include "headers/Point.h"
 #include "headers/Square.h"
+#include "headers/Circle.h"
 
 enum FigureSelect {square = 0, triangle = 1, circle = 2, hexagon = 3};
 
@@ -23,6 +24,7 @@ public:
     int ChooseMaxCount();
     const bool IsRunning() const;
     void GameEventsHandler();
+    void SelectFigureToDraw();
     void SpawnFigure();  
     void DrawFigure();
     void FinishFigure();
@@ -47,8 +49,8 @@ private:
     int pointCount;
     int maxCount;
 
-    //Square sq;
     std::vector<Square> squares;
+    std::vector<Circle> circles;
 
     unsigned int XScreenResolution = 0U, YScreenResolution = 0U;
     
