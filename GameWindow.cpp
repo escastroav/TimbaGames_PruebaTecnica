@@ -147,6 +147,12 @@ void GameWindow::SpawnFigure()
         std::cout << "Circle Spawned at: " << squares.back().GetXPos() << "\t" << squares.back().GetYPos() << "\n";    
         std::cout << "Is drawing:" << drawing << "\n";
         break;
+
+    case hexagon:
+        hexagons.push_back(Hexagon(floatMousePos));
+        std::cout << "Hexagon Spawned at: " << hexagons.back().GetXPos() << "\t" << hexagons.back().GetYPos() << "\n";    
+        std::cout << "Is drawing:" << drawing << "\n";
+        break;
     }
     
        
@@ -168,6 +174,12 @@ void GameWindow::DrawFigure()
         std::cout << "Square Final point at: " 
             << circles.back().GetFinalVec().x - circles.back().GetInitVec().x << "\t"
             << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";
+        break;
+    case hexagon:
+        hexagons.back().Update(floatMousePos);
+        std::cout << "Square Final point at: " 
+            << hexagons.back().GetFinalVec().x - hexagons.back().GetInitVec().x << "\t"
+            << hexagons.back().GetFinalVec().y - hexagons.back().GetInitVec().y  << "\n";
         break;
     }
 }
@@ -221,6 +233,11 @@ void GameWindow::Renderer()
     for(auto cl : circles)
     {
         cl.Render(mainWindow);
+    }
+
+    for(auto hx : hexagons)
+    {
+        hx.Render(mainWindow);
     }
 
     for(auto pt : drawPoints)

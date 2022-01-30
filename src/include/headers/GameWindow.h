@@ -8,6 +8,7 @@
 #include "headers/Point.h"
 #include "headers/Square.h"
 #include "headers/Circle.h"
+#include "headers/Hexagon.h"
 
 enum FigureSelect {square = 0, triangle = 1, circle = 2, hexagon = 3};
 
@@ -51,6 +52,7 @@ private:
 
     std::vector<Square> squares;
     std::vector<Circle> circles;
+    std::vector<Hexagon> hexagons;
 
     unsigned int XScreenResolution = 0U, YScreenResolution = 0U;
     
