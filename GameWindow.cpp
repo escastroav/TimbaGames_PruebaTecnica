@@ -89,6 +89,7 @@ void GameWindow::GameEventsHandler()
                 if(evnt.mouseButton.button == sf::Mouse::Left)
                 {
                     SpawPoint();
+                    maxCount = ChooseMaxCount();
                     drawing = (pointCount > 0 && pointCount < maxCount);   
                     if(pointCount == 1)
                         SpawnFigure();                    
@@ -134,6 +135,7 @@ void GameWindow::SelectFigureToDraw()
 
 void GameWindow::SpawnFigure()
 {
+    std::cout << "max Points To draw: " << maxCount << "\n";
     switch (fig)
     {
     case square:
@@ -153,33 +155,46 @@ void GameWindow::SpawnFigure()
         std::cout << "Hexagon Spawned at: " << hexagons.back().GetXPos() << "\t" << hexagons.back().GetYPos() << "\n";    
         std::cout << "Is drawing:" << drawing << "\n";
         break;
+    case triangle:
+        triangles.push_back(Triangle(floatMousePos));
+        /*std::cout << "Hexagon Spawned at: " << hexagons.back().GetXPos() << "\t" << hexagons.back().GetYPos() << "\n";    
+        std::cout << "Is drawing:" << drawing << "\n";*/
+        break;
     }
     
        
 }
 
 void GameWindow::DrawFigure()
-{
-    
+{    
     switch (fig)
     {
     case square:
         squares.back().Update(floatMousePos);
-        std::cout << "Square Final point at: " 
+        /*std::cout << "Square Final point at: " 
             << squares.back().GetFinalVec().x - squares.back().GetInitVec().x << "\t"
-            << squares.back().GetFinalVec().y - squares.back().GetInitVec().y  << "\n";
+            << squares.back().GetFinalVec().y - squares.back().GetInitVec().y  << "\n";*/
         break;
     case circle:
         circles.back().Update(floatMousePos);
-        std::cout << "Square Final point at: " 
+        /*std::cout << "Square Final point at: " 
             << circles.back().GetFinalVec().x - circles.back().GetInitVec().x << "\t"
-            << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";
+            << circles.back().GetFinalVec().y - circles.back().GetInitVec().y  << "\n";*/
         break;
     case hexagon:
         hexagons.back().Update(floatMousePos);
-        std::cout << "Square Final point at: " 
+        /*std::cout << "Square Final point at: " 
             << hexagons.back().GetFinalVec().x - hexagons.back().GetInitVec().x << "\t"
-            << hexagons.back().GetFinalVec().y - hexagons.back().GetInitVec().y  << "\n";
+            << hexagons.back().GetFinalVec().y - hexagons.back().GetInitVec().y  << "\n";*/
+        break;
+    case triangle:
+        triangles.back().Update(floatMousePos, pointCount);
+        std::cout << triangles.back().GetFirst().x << ","
+         << triangles.back().GetFirst().y << ","
+           << triangles.back().GetSecond().x << ","
+            << triangles.back().GetSecond().y << ","
+             << triangles.back().GetThird().x << ","
+             << triangles.back().GetThird().x << "\n";
         break;
     }
 }
@@ -238,6 +253,11 @@ void GameWindow::Renderer()
     for(auto hx : hexagons)
     {
         hx.Render(mainWindow);
+    }
+
+    for(auto tr : triangles)
+    {
+        tr.Render(mainWindow);
     }
 
     for(auto pt : drawPoints)
