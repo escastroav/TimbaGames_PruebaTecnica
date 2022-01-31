@@ -8,7 +8,7 @@ Animation::Animation(FigureAnimation anim, float spd)
     Xdistance = 0.f;
     Ydistance = 0.f;
     speed = spd;
-    angSpeed = M_PI / 60.f;
+    angSpeed = M_PI * spd / 60.f;
     Xpos = Ypos = 10.f;
     XScreenSize = 800.f;
     YScreenSize = 600.f;
@@ -32,7 +32,7 @@ void Animation::SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv)
 
 void Animation::SetAnimationSpeed(float spd)
 {
-    speed = spd * 1000.f;
+    speed = spd ;
     angSpeed = M_PI * spd / 60.f;
     std::cout << "animation speed: " << speed << "\n";
 }
