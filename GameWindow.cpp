@@ -37,7 +37,7 @@ void GameWindow::InitGameVariables(unsigned int XRes, unsigned int YRes, unsigne
 {
     XScreenResolution = XRes;
     YScreenResolution = YRes;
-    animSpeed = 10.f;
+    animSpeed = 10.f; speedDelta = 0.f;
     this->gameTitle = new sf::String(title, std::locale());
     this->backGroundColor = new sf::Color(RGBcolor[0], RGBcolor[1], RGBcolor[2]);
     this->mainWindow = nullptr;
@@ -60,8 +60,6 @@ void GameWindow::InitWindow()
     this->mainWindow = new sf::RenderWindow(this->videoMode, *this->gameTitle);
 
     this->mainWindow->setFramerateLimit(60);
-
-    gameFileLoader.ReadFile("TestFile.txt");
 }
 
 const bool GameWindow::IsRunning() const
@@ -82,7 +80,17 @@ void GameWindow::GameEventsHandler()
             case sf::Event::KeyPressed:
                 if(evnt.key.code == sf::Keyboard::Escape)
                     this->mainWindow->close();
-                else if(!drawing){
+                if(evnt.key.code == sf::Keyboard::Enter)
+                {
+                    if(!drawing)
+                    {
+                        gameFileLoader.ReadFile("TestFile.txt");
+                        for(int ii = 0; ii < gameFileLoader.figureCount; ii++)
+                            loadedFigures.push_back(gameFileLoader.LoadFigures().at(ii));
+                        figures.insert(figures.end(), loadedFigures.begin(), loadedFigures.end());
+                    }
+                }
+                else if(!drawing){                    
                     SelectFigureToDraw();
                     SelectAnimation();
                     }
@@ -111,7 +119,8 @@ void GameWindow::GameEventsHandler()
                 }
                 break;
             case sf::Event::MouseWheelScrolled:
-                animSpeed += evnt.mouseWheelScroll.delta * 0.5f;  
+                speedDelta = evnt.mouseWheelScroll.delta;
+                animSpeed += speedDelta;  
                 std::cout << "speed changed : " << animSpeed << "\n";
                 break;          
         }        
@@ -171,7 +180,8 @@ void GameWindow::SelectAnimation()
 void GameWindow::SpawnFigure()
 {
     std::cout << "max Points To draw: " << maxCount << "\n";
-    figures.push_back(Figure(floatMousePos, fig, anim, animSpeed));    
+    figures.push_back(Figure(floatMousePos, fig, anim, animSpeed));  
+    figures.back().SetAnimationSpeed(animSpeed);  
     std::cout << "figure spawned: " << fig 
     << ", x = " << figures.back().GetXPos() << ", "
     << ", y = " << figures.back().GetYPos() << "\n";    
@@ -270,6 +280,11 @@ void GameWindow::Renderer()
     {
         fg.Render(mainWindow);
     }
+    
+    /*for(auto fg : loadedFigures)
+    {
+        fg.Render(mainWindow);
+    }*/
 
     for(auto pt : drawPoints)
     {

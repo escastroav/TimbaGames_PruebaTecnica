@@ -30,9 +30,10 @@ void Animation::SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv)
     YBoxPos = poly.getPosition().y - speed;
 }
 
-void Animation::SetAnimationSpeed(float delta)
+void Animation::SetAnimationSpeed(float spd)
 {
-    speed += delta;
+    speed = spd * 1000.f;
+    angSpeed = M_PI * spd / 60.f;
     std::cout << "animation speed: " << speed << "\n";
 }
 

@@ -13,7 +13,7 @@ public:
     ~Animation();
     void SetInitialDirection(sf::CircleShape &poly, sf::ConvexShape &conv, bool vertical, bool horizontal);
     void SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv);
-    void SetAnimationSpeed(float deltaSpeed); 
+    void SetAnimationSpeed(float spd); 
     void LeftRight(sf::CircleShape &poly, sf::ConvexShape &conv);
     void UpDown(sf::CircleShape &poly, sf::ConvexShape &conv);
     void Circular(sf::CircleShape &poly, sf::ConvexShape &conv);

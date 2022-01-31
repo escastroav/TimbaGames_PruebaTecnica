@@ -23,6 +23,7 @@ public:
     void AssignValue();
     void ShowData();
     std::vector<Figure> LoadFigures();
+    int figureCount = 0;
 private:
     std::string dataLine;
     std::string dataNum;
@@ -39,23 +40,8 @@ private:
     float Xpos, Ypos, size;
     float X1, X2, X3;
     float Y1, Y2, Y3;    
-    float tmpAnimSpd;
-
-    const char* figureName = "figure";
-const char* AnimName = "animation";
-const char* SpeedName = "speed";
-const char* RcolName = "color_R";
-const char* GcolName = "color_G";
-const char* BcolName = "color_B";
-const char* XposName = "Xpos";
-const char* YposName = "Ypos";
-const char* sizeName = "size";
-const char* X1Name = "X1";
-const char* X2Name = "X2";
-const char* X3Name = "X3";
-const char* Y1Name = "Y1";
-const char* Y2Name = "Y2";
-const char* Y3Name = "Y3";
-
+    float tmpAnimSpd;    
+    float Xcenter, Ycenter;
+    float boxWidth, boxHeight;
 
 };

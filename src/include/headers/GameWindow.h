@@ -61,13 +61,14 @@ private:
     int maxCount;
 //Figuras que existen en el programa
     std::vector<Figure> figures;
+    std::vector<Figure> loadedFigures;
 //Resolución de pantalla
     unsigned int XScreenResolution = 0U, YScreenResolution = 0U;
 //Revisar si el usuario esta dibujando    
     bool drawing = false;
 //Parametros de animacion
     float XScreenSize, YScreensize;    
-    float animSpeed;
+    float animSpeed = 1.f, speedDelta = 0.f;
     float Xcenter, Ycenter, AnimRadius;
     float XBoxPos, YBoxPos, BoxWidth, BoxHeight;
 //Objeto para cargar archivos

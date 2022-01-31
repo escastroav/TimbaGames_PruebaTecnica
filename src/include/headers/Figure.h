@@ -12,18 +12,22 @@ class Figure : public Animation
 public:
 //Constructores
     Figure();
-    Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim, float spd);
+    Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim, float spd, sf::Color col = sf::Color::Green);
     Figure(FigureSelect fig, 
     FigureAnimation anim, 
     float Rcol, float Gcol, float Bcol, 
-    float Xpos, float Ypos, 
-    float size, float animSpd);
+    float xpos, float ypos, 
+    float size, float animSpd,
+    float xcenter, float ycenter,
+    float bxWidth, float bxHeigth);
     Figure(FigureSelect fig, 
     FigureAnimation anim, 
     float Rcol, float Gcol, float Bcol, 
     float X1, float X2, float X3,
     float Y1, float Y2, float Y3,
-    float animSpd);
+    float animSpd,
+    float xcenter, float ycenter,
+    float bxWidth, float bxHeigth);
 //Destructores
     ~Figure();
 //Inicializacion
@@ -34,6 +38,7 @@ public:
     void UpdatePolygon(sf::Vector2f radius);
     void UpdateConvex(sf::Vector2f next, int pointCount);
 //Animar
+    void SetSize(float size);
     void SetAnimParameters(float xcenter = 400.f, float ycenter = 300.f, float radius = 200.f, float width = 400.f, float height = 300.f, float spd = 10.f);
     void SetAnimParameters(sf::RenderTarget* target, float spd = 100.f, float MoveScale = 0.5f);
     void SetDirection(bool vertical, bool horizontal);

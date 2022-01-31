@@ -1,10 +1,11 @@
 #include "headers/Figure.h"
 
-Figure::Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim, float spd) : Animation(anim, spd)
+Figure::Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim, float spd, sf::Color col) : Animation(anim, spd)
 {   
     zero = sf::Vector2f(0.f,0.f);   
     figType = fig;
     figAnim = anim;
+    color = col;
     firstVector = center;
     secondVector = center;
     thirdVector = center;
@@ -32,20 +33,32 @@ Figure::Figure() : Animation(noAnim)
 Figure::Figure(FigureSelect fig, 
 FigureAnimation anim, 
 float Rcol, float Gcol, float Bcol, 
-float Xpos, float Ypos, float size, float animSpd) : Animation(anim, animSpd)
+float xpos, float ypos, float size, float animSpd,
+    float xcenter, float ycenter,
+    float bxWidth, float bxHeigth) : Animation(anim, animSpd)
 {
     zero = sf::Vector2f(0.f,0.f);
     figType = fig;
     figAnim = anim;
     color.r = Rcol; color.g = Gcol; color.b = Bcol;
     firstVector.x = Xpos; firstVector.y = Ypos;
-    secondVector.x = Xpos + size;
-    secondVector.y = Ypos + size;
-    thirdVector = zero;
-    XWindowPos = Xpos;
-    YWindowPos = Ypos;
+    secondVector = firstVector;
+    thirdVector = firstVector;
+    Xpos = xpos;
+    Ypos = ypos;
+    Xcenter = xcenter; Ycenter = ycenter;
+    BoxWidth = bxWidth; BoxHeight = bxHeigth;
     InitFigure();
-
+    SetSize(size);
+    SetAnimationSpeed(0.f);
+    SetAnimParameters();    
+    if(anim == leftRight || anim == box)
+        SetDirection(false,true);
+    else if(anim == upDown)
+        SetDirection(true,false);
+    
+    SetAnimState(anim != noAnim);
+    
 }
 
 Figure::Figure(FigureSelect fig, 
@@ -53,7 +66,9 @@ Figure::Figure(FigureSelect fig,
     float Rcol, float Gcol, float Bcol, 
     float X1, float X2, float X3,
     float Y1, float Y2, float Y3,
-    float animSpd) : Animation(anim, animSpd)
+    float animSpd,
+    float xcenter, float ycenter,
+    float bxWidth, float bxHeigth) : Animation(anim, animSpd)
 {
     zero = sf::Vector2f(0.f,0.f);
     figType = fig;
@@ -62,9 +77,19 @@ Figure::Figure(FigureSelect fig,
     firstVector.x = X1; firstVector.y = Y1;
     secondVector.x = X2; secondVector.y = Y2;
     thirdVector.x = X3; thirdVector.y = Y3; 
-    XWindowPos = X1;
-    YWindowPos = Y1;
+    XWindowPos = X1; Xpos = X1;
+    YWindowPos = Y1; Ypos = Y1;   
+    Xcenter = xcenter; Ycenter = ycenter;
+    BoxWidth = bxWidth; BoxHeight = bxHeigth;
     InitFigure();
+    SetAnimationSpeed(0.f);
+    SetAnimParameters();    
+    if(anim == leftRight || anim == box)
+        SetDirection(false,true);
+    else if(anim == upDown)
+        SetDirection(true,false);
+    
+    SetAnimState(anim != noAnim);
 }
 
 void Figure::InitFigure()
@@ -92,6 +117,13 @@ void Figure::InitFigure()
         InitConvex();   
     else
         InitPolygon();
+}
+
+void Figure::SetSize(float size)
+{
+    polygon.setRadius(size);
+    if(figType == square)
+        polygon.setRotation(45.f);
 }
 
 void Figure::InitPolygon()

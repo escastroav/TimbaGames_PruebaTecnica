@@ -4,11 +4,14 @@ FileLoader::FileLoader()
 {
     tmpFig = square;
     tmpAnim = noAnim;
+    figureCount = 0;
     Rcol = 0.f; Gcol = 0.f; Bcol = 0.f;
     Xpos = 0.f; Ypos = 0.f; size = 0.f;
     X1 = 0.f; X2 = 0.f; X3 = 0.f;
     Y1 = 0.f; Y2 = 0.f; Y3 = 0.f;    
     tmpAnimSpd = 1.f;
+    Xcenter = 300.f; Ycenter = 400.f;
+    boxWidth = 200.f; boxHeight = 200.f; 
 }
 FileLoader::~FileLoader()
 {
@@ -32,7 +35,8 @@ int FileLoader::ReadFile(std::string fileName)
         data = (char*)dataLine.substr(delim+1,end).c_str();
         AssignData();   
     }
-        ShowData(); 
+    fileToRead.clear();
+    fileToRead.close();
 
 }
 
@@ -51,6 +55,8 @@ void FileLoader::AssignData()
     }
     if(strcmp(dataType,"animation") == 0)
     {
+        if(strcmp(data,"none") == 0)
+            tmpAnim = noAnim;
         if(strcmp(data,"left-right") == 0)
             tmpAnim = leftRight;
         if(strcmp(data,"up-down") == 0)
@@ -64,6 +70,26 @@ void FileLoader::AssignData()
     {
         dataNum = std::string(data);
         tmpAnimSpd = std::stof(dataNum);
+    }
+    if(strcmp(dataType,"Xcenter") == 0)
+    {
+        dataNum = std::string(data);
+        Xcenter = std::stof(dataNum);
+    }
+    if(strcmp(dataType,"Ycenter") == 0)
+    {
+        dataNum = std::string(data);
+        Ycenter = std::stof(dataNum);
+    }
+    if(strcmp(dataType,"boxWidth") == 0)
+    {
+        dataNum = std::string(data);
+        boxWidth = std::stof(dataNum);
+    }
+    if(strcmp(dataType,"boxHeigth") == 0)
+    {
+        dataNum = std::string(data);
+        boxHeight = std::stof(dataNum);
     }
     if(strcmp(dataType,"color_R") == 0)
     {
@@ -125,12 +151,15 @@ void FileLoader::AssignData()
         dataNum = std::string(data);
         Y3 = std::stof(dataNum);
     }
+    if(strcmp(dataType,"END") == 0)
+    {
+        if(tmpFig != triangle)
+            loadedFigures.push_back(Figure(tmpFig, tmpAnim,Rcol,Gcol,Bcol,Xpos,Ypos,size,tmpAnimSpd,Xcenter,Ycenter,boxWidth,boxHeight));
+        else
+            loadedFigures.push_back(Figure(tmpFig, tmpAnim,Rcol,Gcol,Bcol,X1,X2,X3,Y1,Y2,Y3,tmpAnimSpd,Xcenter,Ycenter,boxWidth,boxHeight));
+        figureCount++;
+    }
 }
-
-void FileLoader::AssignValue()
-{
-    
-}   
 
 void FileLoader::ShowData()
 {
@@ -151,5 +180,5 @@ void FileLoader::ShowData()
 
 std::vector<Figure> FileLoader::LoadFigures()
 {
-
+    return loadedFigures;
 }
