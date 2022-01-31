@@ -9,6 +9,13 @@ int main()
 
     GameWindow game;
 
+    std::cout << "Bienvenido a la aplicacion\n" 
+    << "Seleccionar figura:" 
+    << "Q = cuadrado, W = circulo, E = hexagono, R = triangulo \n" 
+    << "Seleccionar Animacion" 
+    << "A = izq-der, S = arr-abj, D = circular, F = caja \n" 
+    << "Para cargar el archivo presione Enter en cualquier momento." << "\n";
+
     while(game.IsRunning())
     {
         game.Updater();
