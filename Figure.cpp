@@ -67,6 +67,8 @@ void Figure::InitPolygon()
 
 void Figure::InitConvex()
 {
+    convex.setPosition(firstVector);
+    convex.setOrigin(firstVector);
     convex.setPointCount(pointCount);
     convex.setPoint(0, firstVector);
     convex.setPoint(1, secondVector);
@@ -94,6 +96,7 @@ void Figure::UpdatePolygon(sf::Vector2f radius)
 
 void Figure::UpdateConvex(sf::Vector2f next, int pointCount)
 {   
+    polygon.setPosition(firstVector);
     if(pointCount == 1)
     {
         secondVector = next;    
