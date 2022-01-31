@@ -25,6 +25,8 @@ public:
 //Animar
     void SetAnimParameters(float xcenter = 400.f, float ycenter = 300.f, float radius = 200.f, float width = 400.f, float height = 300.f, float spd = 10.f);
     void SetAnimParameters(sf::RenderTarget* target, float spd = 100.f, float MoveScale = 0.5f);
+    void SetDirection(bool vertical, bool horizontal);
+    void SetBoxPosition();
     void AnimateFigure();    
 //Update renderizado
     void Render(sf::RenderTarget * target);

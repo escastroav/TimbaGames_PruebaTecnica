@@ -3,7 +3,10 @@
 Animation::Animation(FigureAnimation anim)
 {
     figAnim = anim;
-    direction = 1.f;
+    Xdirection = 0.f;
+    Ydirection = 0.f;
+    Xdistance = 0.f;
+    Ydistance = 0.f;
     speed = 1.f;
     angSpeed = M_PI / 60.f;
     Xpos = Ypos = 10.f;
@@ -21,6 +24,38 @@ Animation::~Animation()
 
 }
 
+void Animation::SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv)
+{
+    XBoxPos = poly.getPosition().x - speed;
+    YBoxPos = poly.getPosition().y - speed;
+}
+
+void Animation::SetInitialDirection(sf::CircleShape &poly, sf::ConvexShape &conv, bool vertical, bool horizontal)
+{
+    float Xpos = poly.getPosition().x;
+    float Ypos = poly.getPosition().y;
+    if(Xpos < XScreenSize * 0.5f && Ypos < YScreenSize * 0.5f)
+    {
+        Xdirection = horizontal ? 1.f : 0.f;
+        Ydirection = vertical ? 1.f : 0.f;    
+    }
+    else if(Xpos > XScreenSize * 0.5f && Ypos < YScreenSize * 0.5f)
+    {
+        Xdirection = horizontal ? -1.f : 0.f;
+        Ydirection = vertical ? 1.f : 0.f;    
+    }
+    else if(Xpos > XScreenSize * 0.5f && Ypos > YScreenSize * 0.5f)
+    {
+        Xdirection = horizontal ? -1.f : 0.f;
+        Ydirection = vertical ? -1.f : 0.f;    
+    }
+    else if(Xpos < XScreenSize * 0.5f && Ypos > YScreenSize * 0.5f)
+    {
+        Xdirection = horizontal ? 1.f : 0.f;
+        Ydirection = vertical ? -1.f : 0.f;    
+    }
+}
+
 void Animation::LeftRight(sf::CircleShape &poly, sf::ConvexShape &conv)
 {   
     bool leftBound = poly.getPosition().x < 0.f;
@@ -30,16 +65,16 @@ void Animation::LeftRight(sf::CircleShape &poly, sf::ConvexShape &conv)
     {
         poly.setPosition(speed, poly.getPosition().y);
         conv.setPosition(speed, conv.getPosition().y);
-        direction = 1.f;
+        Xdirection = 1.f;
     }
     if(rightBound)
     {
         poly.setPosition(2.f * (XScreenSize - speed) - poly.getPosition().x, poly.getPosition().y);
         conv.setPosition(2.f * (XScreenSize - speed) - conv.getPosition().x, conv.getPosition().y);
-        direction = -1.f;
+        Xdirection = -1.f;
     }
-    poly.move(speed * direction, 0.f);
-    conv.move(speed * direction, 0.f);
+    poly.move(speed * Xdirection, 0.f);
+    conv.move(speed * Xdirection, 0.f);
     //std::cout << poly.getPosition().x << ", speed=" << speed <<  "\n";
 }
 void Animation::UpDown(sf::CircleShape &poly, sf::ConvexShape &conv)
@@ -51,16 +86,16 @@ void Animation::UpDown(sf::CircleShape &poly, sf::ConvexShape &conv)
     {
         poly.setPosition(poly.getPosition().x, speed);
         conv.setPosition(conv.getPosition().x, speed);
-        direction = 1.f;
+        Ydirection = 1.f;
     }
     if(downBound)
     {
         poly.setPosition(poly.getPosition().x, 2.f * (YScreenSize - speed) - poly.getPosition().y);
         conv.setPosition(conv.getPosition().x, 2.f * (YScreenSize - speed) - conv.getPosition().y);
-        direction = -1.f;
+        Ydirection = -1.f;
     }
-    poly.move(0.f, speed * direction);
-    conv.move(0.f, speed * direction);
+    poly.move(0.f, speed * Ydirection);
+    conv.move(0.f, speed * Ydirection);
     //std::cout << poly.getPosition().y << ", speed=" << speed  << "\n";
 }
 void Animation::Circular(sf::CircleShape &poly, sf::ConvexShape &conv)
@@ -81,6 +116,44 @@ void Animation::Circular(sf::CircleShape &poly, sf::ConvexShape &conv)
 
 void Animation::Box(sf::CircleShape &poly, sf::ConvexShape &conv)
 {
+    
+    bool leftBound = poly.getPosition().x < XBoxPos;
+    bool rightBound = poly.getPosition().x > XBoxPos + BoxWidth; 
 
+    bool upBound = poly.getPosition().y < YBoxPos;
+    bool downBound = poly.getPosition().y > YBoxPos + BoxHeight; 
+
+    if(leftBound)
+    {
+        poly.setPosition(XBoxPos + speed, poly.getPosition().y);
+        conv.setPosition(XBoxPos + speed, conv.getPosition().y);
+        Xdirection = 0.f;
+        Ydirection = -1.f;
+    }
+    if(rightBound)
+    {
+        poly.setPosition(2.f*(XBoxPos + BoxWidth - speed ) - poly.getPosition().x, poly.getPosition().y);
+        conv.setPosition(2.f*(XBoxPos + BoxWidth - speed ) - poly.getPosition().x, conv.getPosition().y);
+        Xdirection = 0.f;
+        Ydirection = 1.f;
+    }
+    if(upBound)
+    {
+        poly.setPosition(poly.getPosition().x, YBoxPos + speed);
+        conv.setPosition(conv.getPosition().x, YBoxPos + speed);
+        Xdirection = 1.f;
+        Ydirection = 0.f;
+    }
+    if(downBound)
+    {
+        poly.setPosition(poly.getPosition().x, 2.f*(YBoxPos + BoxHeight - speed) - poly.getPosition().y);
+        conv.setPosition(conv.getPosition().x, 2.f*(YBoxPos + BoxHeight - speed) - conv.getPosition().y);
+        Xdirection = -1.f;
+        Ydirection = 0.f;
+    }
+
+    poly.move(speed * Xdirection, speed * Ydirection);
+    conv.move(speed * Xdirection, speed * Ydirection);
+    
 }
 

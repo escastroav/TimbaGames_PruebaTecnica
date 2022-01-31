@@ -197,8 +197,25 @@ void GameWindow::FinishFigure()
 {
     drawing = false;
     figures.back().SetAnimParameters();
-    if(figures.back().GetFigAnim() != noAnim)
-        figures.back().SetAnimState(true);
+    FigureAnimation tmpAnim = figures.back().GetFigAnim();
+
+    if(tmpAnim != noAnim)
+        {   
+            switch(tmpAnim)
+            {
+                case leftRight:
+                figures.back().SetDirection(false, true);
+                break;
+                case upDown:
+                figures.back().SetDirection(true, false);
+                break;
+                case box:
+                figures.back().SetBoxPosition();
+                figures.back().SetDirection(false, true);
+                break;
+            }
+            figures.back().SetAnimState(true);
+        }
     ClearPoints();
 }
 

@@ -11,11 +11,12 @@ class Animation
 public:
     Animation(FigureAnimation anim);
     ~Animation();
+    void SetInitialDirection(sf::CircleShape &poly, sf::ConvexShape &conv, bool vertical, bool horizontal);
+    void SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv);
     void LeftRight(sf::CircleShape &poly, sf::ConvexShape &conv);
     void UpDown(sf::CircleShape &poly, sf::ConvexShape &conv);
     void Circular(sf::CircleShape &poly, sf::ConvexShape &conv);
     void Box(sf::CircleShape &poly, sf::ConvexShape &conv);        
-
     float Xpos, Ypos;
     float XScreenSize, YScreenSize;    
     float speed, angSpeed;
@@ -23,5 +24,5 @@ public:
     float XBoxPos, YBoxPos, BoxWidth, BoxHeight;
 private:
     FigureAnimation figAnim; 
-    float direction;       
+    float Xdirection, Ydirection, Xdistance, Ydistance;       
 };

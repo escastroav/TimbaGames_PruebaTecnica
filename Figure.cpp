@@ -124,18 +124,32 @@ void Figure::SetAnimParameters(sf::RenderTarget* target, float spd, float MoveSc
     BoxWidth = target->getSize().x * MoveScale;
     BoxHeight = target->getSize().y * MoveScale;    
 }
+
+void Figure::SetDirection(bool vertical, bool horizontal)
+{
+    SetInitialDirection(polygon, convex, vertical, horizontal);
+}
+
+void Figure::SetBoxPosition()
+{
+    SetPosBox(polygon, convex);
+}
+
 void Figure::AnimateFigure()
 {
     switch (figAnim)
     {
-    case leftRight:
+    case leftRight:        
         LeftRight(polygon,convex);
         break;
-    case upDown:
+    case upDown:        
         UpDown(polygon, convex);
         break; 
-    case circular:
+    case circular:        
         Circular(polygon, convex);
+        break;    
+    case box:
+        Box(polygon, convex);
         break;    
     }
 }
