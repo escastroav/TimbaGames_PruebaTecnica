@@ -1,6 +1,6 @@
 #include "headers/Figure.h"
 
-Figure::Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim) : Animation(anim)
+Figure::Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim, float spd) : Animation(anim, spd)
 {   
     zero = sf::Vector2f(0.f,0.f);   
     figType = fig;
@@ -29,6 +29,43 @@ Figure::Figure() : Animation(noAnim)
     InitFigure();
 }
 
+Figure::Figure(FigureSelect fig, 
+FigureAnimation anim, 
+float Rcol, float Gcol, float Bcol, 
+float Xpos, float Ypos, float size, float animSpd) : Animation(anim, animSpd)
+{
+    zero = sf::Vector2f(0.f,0.f);
+    figType = fig;
+    figAnim = anim;
+    color.r = Rcol; color.g = Gcol; color.b = Bcol;
+    firstVector.x = Xpos; firstVector.y = Ypos;
+    secondVector.x = Xpos + size;
+    secondVector.y = Ypos + size;
+    thirdVector = zero;
+    XWindowPos = Xpos;
+    YWindowPos = Ypos;
+    InitFigure();
+
+}
+
+Figure::Figure(FigureSelect fig, 
+    FigureAnimation anim, 
+    float Rcol, float Gcol, float Bcol, 
+    float X1, float X2, float X3,
+    float Y1, float Y2, float Y3,
+    float animSpd) : Animation(anim, animSpd)
+{
+    zero = sf::Vector2f(0.f,0.f);
+    figType = fig;
+    figAnim = anim;
+    color.r = Rcol; color.g = Gcol; color.b = Bcol;
+    firstVector.x = X1; firstVector.y = Y1;
+    secondVector.x = X2; secondVector.y = Y2;
+    thirdVector.x = X3; thirdVector.y = Y3; 
+    XWindowPos = X1;
+    YWindowPos = Y1;
+    InitFigure();
+}
 
 void Figure::InitFigure()
 {
@@ -62,7 +99,7 @@ void Figure::InitPolygon()
     polygon = sf::CircleShape(0.f, vertexCount);
     polygon.setPosition(firstVector);
     polygon.setOrigin(firstVector);
-    polygon.setFillColor(sf::Color::Green);
+    polygon.setFillColor(color);
 }
 
 void Figure::InitConvex()
@@ -73,7 +110,7 @@ void Figure::InitConvex()
     convex.setPoint(0, firstVector);
     convex.setPoint(1, secondVector);
     convex.setPoint(2, thirdVector);
-    convex.setFillColor(sf::Color::Green);
+    convex.setFillColor(color);
 }
 
 Figure::~Figure()

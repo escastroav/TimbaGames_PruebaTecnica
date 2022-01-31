@@ -9,14 +9,15 @@ enum FigureAnimation {noAnim = 0, leftRight = 1, upDown = 2, circular = 3, box =
 class Animation
 {
 public:
-    Animation(FigureAnimation anim);
+    Animation(FigureAnimation anim, float spd = 1.f);
     ~Animation();
     void SetInitialDirection(sf::CircleShape &poly, sf::ConvexShape &conv, bool vertical, bool horizontal);
     void SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv);
+    void SetAnimationSpeed(float deltaSpeed); 
     void LeftRight(sf::CircleShape &poly, sf::ConvexShape &conv);
     void UpDown(sf::CircleShape &poly, sf::ConvexShape &conv);
     void Circular(sf::CircleShape &poly, sf::ConvexShape &conv);
-    void Box(sf::CircleShape &poly, sf::ConvexShape &conv);        
+    void Box(sf::CircleShape &poly, sf::ConvexShape &conv); 
     float Xpos, Ypos;
     float XScreenSize, YScreenSize;    
     float speed, angSpeed;

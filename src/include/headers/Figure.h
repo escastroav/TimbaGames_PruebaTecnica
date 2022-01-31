@@ -12,7 +12,18 @@ class Figure : public Animation
 public:
 //Constructores
     Figure();
-    Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim);
+    Figure(sf::Vector2f center, FigureSelect fig, FigureAnimation anim, float spd);
+    Figure(FigureSelect fig, 
+    FigureAnimation anim, 
+    float Rcol, float Gcol, float Bcol, 
+    float Xpos, float Ypos, 
+    float size, float animSpd);
+    Figure(FigureSelect fig, 
+    FigureAnimation anim, 
+    float Rcol, float Gcol, float Bcol, 
+    float X1, float X2, float X3,
+    float Y1, float Y2, float Y3,
+    float animSpd);
 //Destructores
     ~Figure();
 //Inicializacion
@@ -55,6 +66,7 @@ private:
     unsigned int vertexCount;
     sf::CircleShape polygon;
     sf::ConvexShape convex;
+    sf::Color color;
 //Puntos de construccion
     sf::Vector2f zero;
     sf::Vector2f firstVector;

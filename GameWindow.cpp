@@ -3,7 +3,7 @@
 GameWindow::GameWindow()
 {
     InitGameVariables();
-    InitWindow();
+    InitWindow();    
 }
 
 GameWindow::GameWindow(unsigned int XRes, unsigned int YRes, unsigned int RGBcolor[3], const char * title)
@@ -37,6 +37,7 @@ void GameWindow::InitGameVariables(unsigned int XRes, unsigned int YRes, unsigne
 {
     XScreenResolution = XRes;
     YScreenResolution = YRes;
+    animSpeed = 10.f;
     this->gameTitle = new sf::String(title, std::locale());
     this->backGroundColor = new sf::Color(RGBcolor[0], RGBcolor[1], RGBcolor[2]);
     this->mainWindow = nullptr;
@@ -59,6 +60,8 @@ void GameWindow::InitWindow()
     this->mainWindow = new sf::RenderWindow(this->videoMode, *this->gameTitle);
 
     this->mainWindow->setFramerateLimit(60);
+
+    gameFileLoader.ReadFile("TestFile.txt");
 }
 
 const bool GameWindow::IsRunning() const
@@ -106,7 +109,11 @@ void GameWindow::GameEventsHandler()
                     floatMousePos = sf::Vector2f(mousePosWindow.x,mousePosWindow.y);                
                     DrawFigure();
                 }
-                break;            
+                break;
+            case sf::Event::MouseWheelScrolled:
+                animSpeed += evnt.mouseWheelScroll.delta * 0.5f;  
+                std::cout << "speed changed : " << animSpeed << "\n";
+                break;          
         }        
     }    
 }
@@ -131,7 +138,7 @@ void GameWindow::SelectFigureToDraw()
         fig = triangle;
         std::cout << "Dibujando triangulos.\n";
         break;    
-    }
+    }    
 }
 
 void GameWindow::SelectAnimation()
@@ -164,7 +171,7 @@ void GameWindow::SelectAnimation()
 void GameWindow::SpawnFigure()
 {
     std::cout << "max Points To draw: " << maxCount << "\n";
-    figures.push_back(Figure(floatMousePos, fig, anim));
+    figures.push_back(Figure(floatMousePos, fig, anim, animSpeed));    
     std::cout << "figure spawned: " << fig 
     << ", x = " << figures.back().GetXPos() << ", "
     << ", y = " << figures.back().GetYPos() << "\n";    
@@ -175,19 +182,19 @@ void GameWindow::DrawFigure()
     if(fig == triangle)
     {
         figures.back().UpdateConvex(floatMousePos, pointCount);    
-        std::cout << figures.back().GetFirstVec().x << ","
+        /*std::cout << figures.back().GetFirstVec().x << ","
          << figures.back().GetFirstVec().y << ","
            << figures.back().GetSecondVec().x << ","
             << figures.back().GetSecondVec().y << ","
              << figures.back().GetThirdVec().x << ","
-             << figures.back().GetThirdVec().x << "\n";    
+             << figures.back().GetThirdVec().x << "\n";    */
     }
     else
     {
         figures.back().UpdatePolygon(floatMousePos);
-        std::cout << "Polygon Final point rel: " 
+        /*std::cout << "Polygon Final point rel: " 
             << figures.back().GetSecondVec().x - figures.back().GetFirstVec().x << "\t"
-            << figures.back().GetSecondVec().y - figures.back().GetFirstVec().y  << "\n";
+            << figures.back().GetSecondVec().y - figures.back().GetFirstVec().y  << "\n";*/
     }    
     if(figures.back().GetFigAnim() != noAnim)
         figures.back().SetAnimState(false);    
@@ -196,6 +203,7 @@ void GameWindow::DrawFigure()
 void GameWindow::FinishFigure()
 {
     drawing = false;
+    figures.back().SetAnimationSpeed(animSpeed);
     figures.back().SetAnimParameters();
     FigureAnimation tmpAnim = figures.back().GetFigAnim();
 
@@ -242,6 +250,7 @@ void GameWindow::ClearPoints()
 void GameWindow::Updater()
 {
     GameEventsHandler();    
+
     for(int ii = 0; ii < static_cast<int>(figures.size());ii++)
     {
         if(figures.at(ii).IsAnimated())

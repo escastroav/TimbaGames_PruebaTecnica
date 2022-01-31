@@ -1,13 +1,13 @@
 #include "headers/Animation.h"
 
-Animation::Animation(FigureAnimation anim)
+Animation::Animation(FigureAnimation anim, float spd)
 {
     figAnim = anim;
     Xdirection = 0.f;
     Ydirection = 0.f;
     Xdistance = 0.f;
     Ydistance = 0.f;
-    speed = 1.f;
+    speed = spd;
     angSpeed = M_PI / 60.f;
     Xpos = Ypos = 10.f;
     XScreenSize = 800.f;
@@ -28,6 +28,12 @@ void Animation::SetPosBox(sf::CircleShape &poly, sf::ConvexShape &conv)
 {
     XBoxPos = poly.getPosition().x - speed;
     YBoxPos = poly.getPosition().y - speed;
+}
+
+void Animation::SetAnimationSpeed(float delta)
+{
+    speed += delta;
+    std::cout << "animation speed: " << speed << "\n";
 }
 
 void Animation::SetInitialDirection(sf::CircleShape &poly, sf::ConvexShape &conv, bool vertical, bool horizontal)

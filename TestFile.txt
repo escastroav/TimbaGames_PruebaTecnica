@@ -1,0 +1,9 @@
+figure:circle
+animation:up-down
+speed:1.5
+color_R:128
+color_G:40
+color_B:255
+Xpos:128
+Ypos:128
+size:100 
